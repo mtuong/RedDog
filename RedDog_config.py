@@ -1,5 +1,5 @@
 '''
-Configuration file for RedDog.py V1beta.10.3
+Configuration file for RedDog.py V1beta.10.4
 -------------------------------
 
 Copyright (c) 2016 David Edwards, Bernie Pope, Kat Holt
@@ -330,7 +330,7 @@ pipeline = {
     "logDir": "log",
     "logFile": "pipeline.log",
     "style": "print",
-    "procs": 50,
+    "procs": 30,
     "paired": True,
     "verbose": 1,
     "end": ["deleteDir"],
@@ -543,7 +543,7 @@ stages = {
 # large data sets
 #        "walltime": "06:00:00",
 #        "memInGB": 8,
-        "command": "FastTree -gtr -gamma -nt %input > %output"
+        "command": "python make_tree.py %input %out_temp %out_dir"
    },
     "makeNoTree": {
         "command": "python make_no_tree.py %input %out"

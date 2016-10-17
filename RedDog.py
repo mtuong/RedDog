@@ -1,7 +1,7 @@
 #!/bin/env python
 
 '''
-RedDog V1beta.10.3 (Calico Cat) 070916 
+RedDog V1beta.10.4 171016 
 ====== 
 Copyright (c) 2016 David Edwards, Bernie Pope, Kat Holt
 All rights reserved.
@@ -1934,6 +1934,8 @@ if refGenbank == True:
             @transform(parseSNPs, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outMerge + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -1944,7 +1946,7 @@ if refGenbank == True:
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
@@ -1955,6 +1957,8 @@ if refGenbank == True:
             @transform(parseSNPs, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outMerge + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -1965,7 +1969,7 @@ if refGenbank == True:
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
@@ -2144,6 +2148,8 @@ if refGenbank == True:
             @transform(parseSNPs, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outPrefix + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2154,7 +2160,7 @@ if refGenbank == True:
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
@@ -2165,6 +2171,8 @@ if refGenbank == True:
             @transform(parseSNPs, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outPrefix + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2175,7 +2183,7 @@ if refGenbank == True:
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
@@ -2345,6 +2353,8 @@ else: # refGenbank == False
             @transform(parseSNPsNoGBK, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outMerge + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2355,7 +2365,7 @@ else: # refGenbank == False
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
@@ -2366,6 +2376,8 @@ else: # refGenbank == False
             @transform(parseSNPsNoGBK, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outMerge + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2376,7 +2388,7 @@ else: # refGenbank == False
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
@@ -2526,6 +2538,8 @@ else: # refGenbank == False
             @transform(parseSNPsNoGBK, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outPrefix + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2536,7 +2550,7 @@ else: # refGenbank == False
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
@@ -2547,6 +2561,8 @@ else: # refGenbank == False
             @transform(parseSNPsNoGBK, regex(r"(.*)\/(.+)_alleles_var_cons"+str(conservation)+".csv"), [outPrefix + r"\2_alleles_var_cons"+str(conservation)+".tree", outSuccessPrefix + r"\2_alleles.makeTree.Success"])
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
+                (output_dir, name, ext) = splitPath(output)
+                temp_tree = outTempPrefix + name + "." + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2557,7 +2573,7 @@ else: # refGenbank == False
                     elif isolate_count > 500 and force_tree:
                         do_tree = True
                 if do_tree:
-                    runStageCheck('makeTree', flagFile, input, output)
+                    runStageCheck('makeTree', flagFile, input, temp_tree, output_dir)
                 else:
                     runStageCheck('makeNoTree', flagFile, input, output)
             if runType == "phylogeny":
