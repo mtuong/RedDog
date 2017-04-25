@@ -2149,7 +2149,7 @@ if refGenbank == True:
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2172,7 +2172,7 @@ if refGenbank == True:
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2354,7 +2354,7 @@ else: # refGenbank == False
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2377,7 +2377,7 @@ else: # refGenbank == False
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2539,7 +2539,7 @@ else: # refGenbank == False
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -2562,7 +2562,7 @@ else: # refGenbank == False
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False

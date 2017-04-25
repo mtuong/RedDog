@@ -13,14 +13,18 @@ Modified:
 
 author: David Edwards
 '''
-import os, sys, command
+import os, sys, commands
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
 output_directory = sys.argv[3]
 
-command = "FastTree -gtr -gamma -nt " + input_file + " > " + output_file
-os.popen(command)
+command1 = "FastTree -gtr -gamma -nt " + input_file + " > " + output_file
+print "Running FastTree as follows:"
+print command1
+os.popen(command1)
 
-command = "cp " + output_file + " > " + output_directory
-os.popen(command)
+command2 = "cd " + output_directory + " && cp " + output_file + " . "
+print "Copying output tree as follows:"
+print command2
+os.popen(command2)
