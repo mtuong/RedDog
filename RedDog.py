@@ -240,23 +240,42 @@ try:
     if not(SNPcaller != 'c' or SNPcaller != 'm'):
         print "\nUnrecognised SNPcaller option"
         print "Pipeline Stopped: please check 'SNPcaller' in the config file\n"
+        sys.exit()
     else:
         SNPcaller = '-' + SNPcaller
 except:
     SNPcaller = '-c'
 
 sequence_list = []
+twice_added_list = []
 for sequence in sequences:
     (prefix, name, ext) = splitPath(sequence)
     if readType == "IT":
-        sequence_list.append(name[:-16])
+        if name[:-16] not in sequence_list:
+            sequence_list.append(name[:-16])
+        else:
+            print "\nNon-unique sequence (read set) name detected"
+            print "Pipeline Stopped: check before trying to rerun\n"
+            sys.exit()
+
     elif readType == "PE":
-        if name.find('_1.fastq') != -1 and name[:-8] not in sequence_list:
-            sequence_list.append(name[:-8])
-        if name.find('_2.fastq') != -1 and name[:-8] not in sequence_list:
-            sequence_list.append(name[:-8])            
+        if name.find('_1.fastq') != -1 or name.find('_2.fastq') != -1:
+            if name[:-8] not in sequence_list:
+                sequence_list.append(name[:-8])
+            elif name[:-8] not in twice_added_list:
+                twice_added_list.append(name[:-8])
+            else:
+                print "\nNon-unique sequence (read set) name detected"
+                print "Pipeline Stopped: check before trying to rerun\n"
+                sys.exit()
+
     else:
-        sequence_list.append(name[:-6])
+        if name[:-6] not in sequence_list:
+            sequence_list.append(name[:-6])
+        else:
+            print "\nNon-unique sequence (read set) name detected"
+            print "Pipeline Stopped: check before trying to rerun\n"
+            sys.exit()
 
 if readType == 'PE':
     missing_pairs = []
@@ -760,7 +779,7 @@ if continuity_test:
                 else:
                     print "Please enter either '1' for new value, or '2' for old value"
 
-    if old_bowtie_X != '' and int(old_bowtie_X) != bowtie_X_value:
+    if old_bowtie_X != '' and float(old_bowtie_X) != bowtie_X_value:
         print "\n'bowtie_X_value' has changed since last run"
         value_change = False
         attempts_count = 0
@@ -769,7 +788,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    bowtie_X_value = int(old_bowtie_X)
+                    bowtie_X_value = float(old_bowtie_X)
                 print "\n'bowtie_X_value' set to " + str(bowtie_X_value)
             else:
                 attempts_count +=1
@@ -788,7 +807,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    minDepth = int(old_min_depth)
+                    minDepth = float(old_min_depth)
                 print "\n'minimum_depth' set to " + str(minDepth)
             else:
                 attempts_count +=1
@@ -807,7 +826,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    coverFail = int(old_cover_fail)
+                    coverFail = float(old_cover_fail)
                 print "\n'cover_fail' set to " + str(coverFail)
             else:
                 attempts_count +=1
@@ -826,7 +845,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    depthFail = int(old_depth_fail)
+                    depthFail = float(old_depth_fail)
                 print "\n'depth_fail' set to " + str(depthFail)
             else:
                 attempts_count +=1
@@ -846,7 +865,7 @@ if continuity_test:
                 if keyboard_entry == '1' or keyboard_entry == '2':
                     value_change = True
                     if keyboard_entry == '2':
-                        mappedFail = int(old_mapped_fail)
+                        mappedFail = float(old_mapped_fail)
                     print "\n'mapped_fail' set to " + str(mappedFail)
                 else:
                     attempts_count +=1
@@ -865,7 +884,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    sdOutgroupMultiplier = old_sd_out
+                    sdOutgroupMultiplier = float(old_sd_out)
                 print "\n'sd_out' set to " + str(sdOutgroupMultiplier)
             else:
                 attempts_count +=1
@@ -884,7 +903,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    conservation = int(old_conservation)
+                    conservation = float(old_conservation)
                 print "\n'conservation' set to " + str(conservation)
             else:
                 attempts_count +=1
@@ -1051,7 +1070,7 @@ if mapping == 'bowtie':
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
             for seq in sequences:
-                if seq.find(name+'_1.fastq') != -1:
+                if seq.find(name+'_1.fastq') != -1 and len(name) == len(seq):
                     read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
@@ -1122,9 +1141,8 @@ if mapping == 'bowtie':
             bamFile, _success = inputs
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
-            test = name+readPattern
             for seq in sequences:
-                if seq.find(test) != -1:
+                if seq.find(name+'.fastq') != -1 and len(name) == len(seq):
                     read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
@@ -1210,7 +1228,7 @@ else: # mapping = 'BWA'
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
             for seq in sequences:
-                if seq.find(name+'_1.fastq') != -1:
+                if seq.find(name+'_1.fastq') != -1 and len(name) == len(seq):
                     read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
@@ -1283,7 +1301,7 @@ else: # mapping = 'BWA'
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
             for seq in sequences:
-                if seq.find(name+readPattern) != -1:
+                if seq.find(name) != -1 and len(name) == len(seq):
                     read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
