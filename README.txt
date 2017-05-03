@@ -1,4 +1,4 @@
-RedDog V1beta.10.4 171016
+RedDog V1beta.10.4 030517
 ====== 
 Copyright (c) 2016 David Edwards, Bernie Pope, Kat Holt
 All rights reserved.
@@ -33,14 +33,14 @@ Note: for Illumina paired-end or single reads, or Ion Torrent single reads.
 IMPORTANT: See config file/instructions for input options/requirements
 
 current version:
-V1beta.10.4 fix to capture FastTree hitting memory limit
-V1beta.10.3 (Calico Cat)
-            fix for SE and IT reads (no stand bias calling atm - need to validate b4 adding)
-            update to many programs used (local Helix installation)
-            User Manual update
-V1beta.10.2 minor corrections for local install and R scripts
-V1beta.10.1 fix for minor error in q30VarFilter
-V1beta.10   added strand bias test
+V1beta.10.4 fix to FastTree step
+            inclusion of RedDog logo (.png format, see 'docs')
+            fix for parseSNPTabe (fix for ambiguous codons in reference)
+            addition of strand bias settings in continuity testing
+            further testing (and fixes) of continuity between runs
+            fixed error in checkBam (name of read set is found nested in name of another read set)
+            added configuration file for SPARTAN (local)
+            added further check for identical names from read sets in different folders
 
 previous versions:
 V0.1        converted to vcf output via mpileup instead of depreciated pileup 
@@ -194,18 +194,24 @@ V1beta.5    added further filter of SNPS in finalFilter
 V1beta.6    changed back to FastTree - precision error in RAxML -m ASC_GTRCAT 
             changed maximum isolates for tree to 500 
             changed checkBam to pass BAMs from simulated reads 
-V1beta.7 (BlackCat)
+V1beta.7    (BlackCat)
             fixed bug in quality filtering of variant calls 
 V1beta.8    tutorial update 
 V1beta.9    local system update 
             manual update 
+V1beta.10   added strand bias test
+V1beta.10.1 fix for minor error in q30VarFilter
+V1beta.10.2 minor corrections for local install and R scripts
+V1beta.10.3 (Calico Cat)
+            fix for SE and IT reads (no stand bias calling atm - need to validate b4 adding)
+            update to many programs used (local Helix installation)
+            User Manual update
 
 next planned updates
 V1.0        Offical Public Release of RedDog (on acceptance of paper) 
 
 (Post-release)
     changes to input sequences pattern recognition
-    extend parseGeneContent functions 
     reanalysis without mapping
         with/without a GenBank file,
         restore of read sets removed by user,

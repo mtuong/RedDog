@@ -1,7 +1,7 @@
 #!/bin/env python
 
 '''
-RedDog V1beta.10.4 171016 
+RedDog V1beta.10.4 030517 
 ====== 
 Copyright (c) 2016 David Edwards, Bernie Pope, Kat Holt
 All rights reserved.
