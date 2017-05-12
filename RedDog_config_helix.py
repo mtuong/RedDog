@@ -7,10 +7,20 @@ All rights reserved. (see README.txt for more details)
 
 Essential pipeline variables.
 '''
-reference = ""
-sequences = ""
-output = ""
-out_merge_target = ""
+
+reference = "/vlsci/SG0006/shared/data/reddog_test_set/pipeline_test_sets/shigella/NC_007384_with_plasmid.gbk"
+
+#sequences = "/vlsci/SG0006/shared/data/reddog_test_set/pipeline_test_sets/shigella/*.fastq.gz"
+sequences = "/vlsci/SG0006/shared/data/reddog_test_set/pipeline_test_sets/shigella/extra/*.fastq.gz"
+#sequences = ["/vlsci/SG0006/shared/data/reddog_test_set/pipeline_test_sets/shigella/*.fastq.gz","/vlsci/SG0006/shared/data/reddog_test_set/pipeline_test_sets/shigella/extra3/*.fastq.gz"]
+#sequences = "/vlsci/SG0006/shared/data/reddog_test_set/pipeline_test_sets/shigella/fake_it/*.fastq.gz"
+#sequences = "/vlsci/SG0006/shared/data/reddog_test_set/pipeline_test_sets/shigella/fake_it/extra3/*.fastq.gz"
+
+#output = "/scratch/sysgen/david/reddog_test/mapping_test"
+output = "/scratch/sysgen/david/reddog_test/mapping_test_merge"
+
+#out_merge_target = ""
+out_merge_target = "/scratch/sysgen/david/reddog_test/mapping_test"
 
 '''
 force_tree and force_no_tree
@@ -179,19 +189,19 @@ http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml
 #end-to-end mode
 #bowtie_map_type = "--very-fast"
 #bowtie_map_type = "--fast"
-#bowtie_map_type = "--sensitive"
+bowtie_map_type = "--sensitive"
 #bowtie_map_type = "--very-sensitive"
 
 #local mode
 #bowtie_map_type = "--very-fast-local"
 #bowtie_map_type = "--fast-local"
-bowtie_map_type = "--sensitive-local"
+#bowtie_map_type = "--sensitive-local"
 #bowtie_map_type = "--very-sensitive-local"
 '''
 The default maximum length for bowtie2 to consider pair-ended reads contiguous
 is 2000 - you can change this with bowtie_X_value
 '''
-bowtie_X_value = 2000
+bowtie_X_value = 1800
 
 '''
 BCFtools SNP calling
@@ -203,8 +213,8 @@ The consensus sequences used to populate the allele table based on these SNPs ar
 still generated using the original consensus caller - this will be changed if/when 
 a vcf2fq program is available for multiallelic-generated VCFs
 '''
-SNPcaller = "c"
-#SNPcaller = "m"
+#SNPcaller = "c"
+SNPcaller = "m"
 
 '''
 You can also "remove" any reads: these will be marked as "failed"
@@ -223,7 +233,7 @@ Default value:
         minimum_depth = 5
 
 '''
-minimum_depth = 5
+minimum_depth = 4
 '''
 HetsVCF
 The pipeline filters out heterozygous SNP calls.
@@ -242,10 +252,10 @@ suggested (default) values
         sd_out = 2 
 
 '''
-cover_fail = 50
-depth_fail = 10
-mapped_fail = 50
-sd_out = 2
+cover_fail = 45.5
+depth_fail = 8
+mapped_fail = 35
+sd_out = 2.2
 
 '''
 Strand Bias Cutoff value
@@ -273,8 +283,8 @@ and rep3 is 25% of the total genome (by default).
 Note: there must be no spaces in the list.
 
 '''
-check_reads_mapped = ""
-#check_reads_mapped = "off"
+#check_reads_mapped = ""
+check_reads_mapped = "off"
 #check_reads_mapped = "rep_1"
 #check_reads_mapped = "rep_1,rep_2,x,0.6"
 #check_reads_mapped = "rep_1,rep_2,rep_3,x,0.45,0.3"
@@ -292,7 +302,7 @@ will still be produced, but so too will the 85% matrix (in this example),
 and downsteam analysis carried out on this matrix.
 
 '''
-conservation = 0.95
+conservation = 0.9
 
 '''
 Difference Matrix
@@ -438,6 +448,8 @@ stages = {
 # large file size (any read set >800MB)
 #        "walltime": "06:00:00",
         "command": "samtools mpileup -q 20 -ugB -f %ref %bam | bcftools call -c - | vcfutils.pl vcf2fq > %output"
+# For bugwas, '-q 20' is set to '-q 10'
+#        "command": "samtools mpileup -q 10 -ugB -f %ref %bam | bcftools call -c - | vcfutils.pl vcf2fq > %output"
     },
     "getCoverage": {
         "walltime": "01:00:00",

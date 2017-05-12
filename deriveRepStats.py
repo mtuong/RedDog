@@ -12,7 +12,7 @@ example:
 python deriveRepStats.py <isolate>_rep_cover.txt replicon depth_fail cover_fail runType mapped_fail check_reads_mapped
 
 Created:	29042013
-Modified:	16072014
+Modified:	12052017  
 author: David Edwards
 '''
 import sys
@@ -92,9 +92,9 @@ output_RepStats += vcf[0] +"\t"+ het +"\t"+ vcf[2]
 # decide if a sample (strain) is a fail or pass
 
 depthFail = int(sys.argv[3])
-coverFail = int(sys.argv[4])
+coverFail = float(sys.argv[4])
 runType = sys.argv[5]
-mappedFail = int(sys.argv[6])
+mappedFail = float(sys.argv[6])
 check_reads_mapped = sys.argv[7]
 
 line_end = False
@@ -106,7 +106,7 @@ elif (cover_test_value < coverFail):
 	line_end = True
 elif (check_reads_mapped != "off"):
 	if check_reads_mapped == replicon:
-		if (mapped_test_value < int(mappedFail)):
+		if mapped_test_value < mappedFail:
 			output_RepStats += "\tf\n"
 			line_end = True
 	elif (check_reads_mapped.find(replicon) != -1):

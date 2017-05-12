@@ -15,6 +15,7 @@ Modified:	28/10/2013 to mergeRepStats from mergeStats
             15/04/2014 changed to produce outgroup.txt file if there are any outgroups to report
             20/05/2014 fix to outgroup reporting
             04/07/2014 change to replace_reads handling
+            12/05/2017 fix to passing sdOutgroupMutiplier
 
 author: David Edwards
 '''
@@ -23,7 +24,7 @@ from pipe_utils import splitPath
 
 inFileName = sys.argv[1]
 (inPrefix, inName, inExt) = splitPath(inFileName)
-sdOutgroupMutiplier = int(sys.argv[2])
+sdOutgroupMutiplier = float(sys.argv[2])
 mergeFileName = sys.argv[4] + inName + inExt
 replace = sys.argv[3]
 runType = sys.argv[5]

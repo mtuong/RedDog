@@ -347,7 +347,7 @@ stageDefaults = {
 
     "modules": [
          "Python/2.7.12-goolf-2015a",
-         "Biopython/1.68-goolf-2015a-Python-2.7.12"
+         "Biopython/1.68-goolf-2015a-Python-2.7.12",
          "BWA/0.6.2-vlsci_intel-2015.08.25",
          "SAMtools/1.3.1-intel-2016.u3",
          "BCFtools/1.3-intel-2016.u3",

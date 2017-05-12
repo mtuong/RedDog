@@ -56,7 +56,7 @@ from pipe_utils import (isGenbank, isFasta, chromInfoFasta, chromInfoGenbank, ge
                         getCover, make_sequence_list, getSuccessCount, make_run_report, 
                         get_run_report_data, getFastaDetails)
 
-version = "V1beta.10.3"
+version = "V1beta.10.4"
 
 modules = pipeline_options.stageDefaults['modules']
 
@@ -760,7 +760,7 @@ if continuity_test:
                     else:
                         print "Please enter either '1' for 'yes', or '2' for 'no'"
 
-    if old_bowtie_preset != '' and old_bowtie_preset != bowtie_map_type:
+    if old_bowtie_preset != '' and old_bowtie_preset != bowtie_map_type and mapping != 'bwa':
         print "\n'bowtie_map_type' has changed since last run"
         value_change = False
         attempts_count = 0
@@ -779,7 +779,7 @@ if continuity_test:
                 else:
                     print "Please enter either '1' for new value, or '2' for old value"
 
-    if old_bowtie_X != '' and float(old_bowtie_X) != bowtie_X_value:
+    if old_bowtie_X != '' and int(old_bowtie_X) != bowtie_X_value  and mapping != 'bwa':
         print "\n'bowtie_X_value' has changed since last run"
         value_change = False
         attempts_count = 0
@@ -788,7 +788,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    bowtie_X_value = float(old_bowtie_X)
+                    bowtie_X_value = int(old_bowtie_X)
                 print "\n'bowtie_X_value' set to " + str(bowtie_X_value)
             else:
                 attempts_count +=1
@@ -807,7 +807,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    minDepth = float(old_min_depth)
+                    minDepth = int(old_min_depth)
                 print "\n'minimum_depth' set to " + str(minDepth)
             else:
                 attempts_count +=1
@@ -817,7 +817,7 @@ if continuity_test:
                 else:
                     print "Please enter either '1' for new value, or '2' for old value"
 
-    if int(old_cover_fail) != coverFail:
+    if float(old_cover_fail) != coverFail:
         print "\n'cover_fail' has changed since last run"
         value_change = False
         attempts_count = 0
@@ -845,7 +845,7 @@ if continuity_test:
             if keyboard_entry == '1' or keyboard_entry == '2':
                 value_change = True
                 if keyboard_entry == '2':
-                    depthFail = float(old_depth_fail)
+                    depthFail = int(old_depth_fail)
                 print "\n'depth_fail' set to " + str(depthFail)
             else:
                 attempts_count +=1
@@ -856,7 +856,7 @@ if continuity_test:
                     print "Please enter '1' for new value, or '2' for old value"
 
     if old_mapped_fail != 'off' and check_reads_mapped != 'off':
-        if int(old_mapped_fail) != mappedFail:
+        if float(old_mapped_fail) != mappedFail:
             print "\n'mapped_fail' has changed since last run"
             value_change = False
             attempts_count = 0
@@ -875,7 +875,7 @@ if continuity_test:
                     else:
                         print "Please enter either '1' for new value, or '2' for old value"
 
-    if int(old_sd_out) != sdOutgroupMultiplier:
+    if float(old_sd_out) != sdOutgroupMultiplier:
         print "\n'sd_out' has changed since last run"
         value_change = False
         attempts_count = 0
@@ -1070,7 +1070,8 @@ if mapping == 'bowtie':
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
             for seq in sequences:
-                if seq.find(name+'_1.fastq') != -1 and len(name) == len(seq):
+                (prefix, name2, ext) =splitPath(seq)
+                if seq.find(name+'_1.fastq') != -1 and (len(prefix)+len(name)+12) == len(seq):
                     read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
@@ -1142,8 +1143,13 @@ if mapping == 'bowtie':
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
             for seq in sequences:
-                if seq.find(name+'.fastq') != -1 and len(name) == len(seq):
-                    read_set = seq
+                (prefix, name2, ext) =splitPath(seq)
+                if readType == "SE":
+                    if seq.find(name+'.fastq') != -1 and (len(prefix)+len(name)+10) == len(seq):
+                        read_set = seq
+                else:
+                    if seq.find(name+'_in.iontor.fastq') != -1 and (len(prefix)+len(name)+20) == len(seq):
+                        read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
 
@@ -1228,7 +1234,8 @@ else: # mapping = 'BWA'
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
             for seq in sequences:
-                if seq.find(name+'_1.fastq') != -1 and len(name) == len(seq):
+                (prefix, name2, ext) =splitPath(seq)
+                if seq.find(prefix + '/' + name) != -1:
                     read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
@@ -1301,7 +1308,8 @@ else: # mapping = 'BWA'
             (prefix, name, ext) = splitPath(bamFile)
             read_set = ""
             for seq in sequences:
-                if seq.find(name) != -1 and len(name) == len(seq):
+                (prefix, name2, ext) =splitPath(seq)
+                if seq.find(prefix + '/' + name) != -1:
                     read_set = seq
             runStageCheck('checkBam', flagFile, bamFile, readType, read_set)
         stage_count += len(sequence_list)        
@@ -1712,7 +1720,7 @@ if outMerge != "":
             runStageCheck('getRepSNPList', flagFile, input, replicon, output)
         stage_count += len(core_replicons) 
 
-else: #    if mergeReads == "":
+else: #    if outMerge == "":
     if runType == "phylogeny":
         # Start of new run phylogeny analysis
         def snpListByRep():
@@ -1953,7 +1961,7 @@ if refGenbank == True:
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -1976,7 +1984,7 @@ if refGenbank == True:
             def makeTree(inputs, outputs):
                 output, flagFile = outputs
                 (output_dir, name, ext) = splitPath(output)
-                temp_tree = outTempPrefix + name + "." + ext
+                temp_tree = outTempPrefix + name + ext
                 input, _success = inputs
                 input = input[:-4] + ".mfasta"
                 do_tree = False
@@ -1995,7 +2003,7 @@ if refGenbank == True:
             else:
                 stage_count += len(core_replicons)
 
-    else: #ie. mergeReads == "" and refGenbank == True
+    else: #ie. outMerge == "" and refGenbank == True
         # generate the gene cover and depth matrices
         @transform(getCoverage, regex(r"(.*)\/(.+)_coverage.txt"), [outTempPrefix + r'\2/\2_CoverDepthMatrix.txt', outSuccessPrefix + r'\2.deriveAllRepGeneCover.Success'])
         def deriveAllRepGeneCover(inputs, outputs):
